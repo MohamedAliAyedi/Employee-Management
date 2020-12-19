@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+	<link rel="shortcut icon" href="/static/assets/img/favicon.ico" />
+	<script src="/static/vue.js" preload></script>
+	<link rel="stylesheet" href="/static/tailwind.min.css">
+    <link rel="apple-touch-icon" sizes="76x76" href="/static/assets/img/apple-icon.png" />
+    <link  rel="stylesheet"  href="/static/assets/vendor/@fortawesome/fontawesome-free/css/all.min.css"  />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.css" />
+	<script src="/static/assets/jquery.min.js"></script>
+	<title>Dashboard</title>
+	<script>
+		$(document).ready(function(){
+   		 setTimeout(function() {
+        $('#loading').fadeOut();
+    }, 3000);
+});
+	</script>
+  </head>
+  <body class="text-gray-800 antialiased">
+	<noscript>You need to enable JavaScript to run this app.</noscript>
+	<!-- Loading-->
+	<div id="loading" class="bg-gray-200 md:text-base text-sm border-b p-2 h-24">
+		<p>loading ...........</p>
+	  </div>
+	</div>
+	<div id="app">
+      <div class="relative bg-gray-100">
+        <nav class="top-0 absolute z-50 w-full flex flex-wrap items-center justify-between px-2 py-3 navbar-expand-lg" >
+          <div class="container px-4 mx-auto flex flex-wrap items-center justify-between">
+            <div  class="w-full relative flex justify-between lg:w-auto lg:static lg:block lg:justify-start" >
+              <a class="text-sm font-bold leading-relaxed inline-block mr-4 py-2 whitespace-no-wrap uppercase text-white" href="">
+          Employee Management
+          </a>
+          <button
+                class="cursor-pointer text-xl leading-none px-3 py-1 border border-solid border-transparent rounded bg-transparent block lg:hidden outline-none focus:outline-none"
+                type="button"
+              >
+                <i class="text-white fas fa-bars"></i>
+              </button>
+            </div>
+            <div  class="lg:flex flex-grow items-center bg-white lg:bg-transparent lg:shadow-none hidden"  id="example-collapse-navbar" >
+              <ul class="flex flex-col lg:flex-row list-none lg:ml-auto">
+          <li>
+          <span class="mr-6 text-white hover:text-gray-500 h-full py-4 px-2 cursor-pointer" v-on:click="create()">Create</span>
+          </li>
+          <li>
+          <span class="mr-6 text-white hover:text-gray-500 h-full py-4 px-2 cursor-pointer" v-on:click="index()">List</span>
+        </li>		
+          <li>
+          <span class="mr-6 text-white hover:text-gray-500 h-full py-4 px-2 cursor-pointer" v-on:click="logout()">Logout</span>
+        </li>		
+              </ul>
+            </div>
+          </div>
+        </nav>
+        <!-- Header -->
+        <div class="relative bg-gray-600 md:pt-32 pb-32 pt-12">
+          <div class="px-4 md:px-10 mx-auto w-full">
+            <div>
+              <!-- Card stats -->
+              <div class="flex flex-wrap">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="px-4 md:px-10 mx-auto w-full -m-24">
+
+          <div class="flex flex-wrap mt-4">
+            <div class="w-full mb-12 xl:mb-0 px-4">
+              <div class="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded">
+                <div class="block w-full overflow-x-auto">
+                  <!-- Projects table -->
+                  <table class="items-center w-full bg-transparent border-collapse">
+                    <thead>
+                      <tr>
+                        <th class="px-6 bg-gray-100 text-gray-600 align-middle border border-solid border-gray-200 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-no-wrap font-semibold text-left">
+							ID
+                        </th>
+                        <th class="px-6 bg-gray-100 text-gray-600 align-middle border border-solid border-gray-200 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-no-wrap font-semibold text-left">
+							IMAGE
+                        </th>
+                        <th class="px-6 bg-gray-100 text-gray-600 align-middle border border-solid border-gray-200 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-no-wrap font-semibold text-left">
+							NAME
+                        </th>
+                        <th class="px-6 bg-gray-100 text-gray-600 align-middle border border-solid border-gray-200 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-no-wrap font-semibold text-left">
+							EMAIL WORK
+                        </th>
+                        <th class="px-6 bg-gray-100 text-gray-600 align-middle border border-solid border-gray-200 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-no-wrap font-semibold text-left">
+							WORK LOCATION
+                        </th>
+                        <th class="px-6 bg-gray-100 text-gray-600 align-middle border border-solid border-gray-200 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-no-wrap font-semibold text-left">
+							PHONE WORK
+                        </th>
+                        <th class="px-6 bg-gray-100 text-gray-600 align-middle border border-solid border-gray-200 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-no-wrap font-semibold text-left">
+							ACTION
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+
+                      <tr  v-for="employee in employees">
+                        <td class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-no-wrap p-4">
+							<span>{% raw %} {{employee.id}} {% endraw %}	</span>						
+						</td>
+                        <td class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-no-wrap p-4">
+							<img :src="'data:image/png;base64,'+employee.image_medium" style="border-radius: 50%;"  />
+						</td>
+                        <td class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-no-wrap p-4">
+							{% raw %} {{employee.display_name}} {% endraw %}
+
+						</td>
+                        <td class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-no-wrap p-4">
+							{% raw %} {{employee.work_email}} {% endraw %}
+
+						</td>
+                        <td class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-no-wrap p-4">
+							{% raw %} {{employee.work_location}} {% endraw %}
+	
+						</td>
+                        <td class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-no-wrap p-4">
+							{% raw %} {{employee.work_phone}} {% endraw %}	
+						</td>
+                        <td class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-no-wrap p-4">
+							<button v-on:click="deleteemployee(employee.id)" class="bg-red-500 text-gray-200 rounded hover:bg-red-400 px-4 py-2 focus:outline-none">remove</button>
+							<button v-on:click="detailemployee(employee.id)" class="bg-yellow-500 text-gray-200 rounded hover:bg-yellow-400 px-4 py-2 focus:outline-none">Detail</button>
+							<button v-on:click="updateemployee(employee.id)" class="bg-blue-500 text-gray-200 rounded hover:bg-blue px-4 py-2 focus:outline-none">Update</button>
+						</td>
+
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+	<script>
+		let app = new Vue({
+			el: "#app",
+			data:() =>  {
+				return {
+					msg: "hello world",
+					auth: "false",
+					employees: []
+				}
+			},
+			mounted: async function(){
+				let uid = localStorage.getItem("uid");
+				let password = localStorage.getItem("password");
+
+				if(uid != null && password != null) {
+					await fetch("http://localhost:5000/api/employees",{method:"post",headers:{"Content-Type":"application/json"},body:JSON.stringify({uid:uid,password:password})})
+					.then((res)=>res.json())
+					.then((res)=>{this.employees = res});
+					
+					//this.auth = true;
+				} else {
+					location = "/";
+				}
+			},
+			methods: {
+				isAuth: function() { return this.auth },
+				logout: function() {
+					localStorage.removeItem("uid");
+					localStorage.removeItem("password");
+					location = "/"
+				},
+				debug: function() {
+					console.log(this.purchases);
+					console.log(this.msg);
+				},
+				create: async function() {
+					location = "/create";
+				},
+				index: async function() {
+					location = "/";
+				},
+				deleteemployee: async function(_id) { 
+					let uid = localStorage.getItem("uid");
+						let password = localStorage.getItem("password");
+						var status_code;
+					await fetch("http://localhost:5000/api/delete/"+_id,{method:"post",headers:{"Content-Type":"application/json"},body:JSON.stringify({uid:uid,password:password})})
+							.then((res)=>{status_code = res.status; return res.text()})
+							.then((res)=>{alert(res)})
+							if(status_code == 200) {
+								location = "/list";
+							} else {
+								this.error = true;
+							}
+				},
+				detailemployee: async function(_id) { 
+							if(_id != 0) {
+
+								localStorage.setItem("oid",_id);
+								location = "/detail/"+_id;
+
+							} else {
+								this.error = true;
+							}
+				},
+				updateemployee: async function(_id) { 
+							if(_id != 0) {
+
+								localStorage.setItem("oid",_id);
+								location = "/update/"+_id;
+
+							} else {
+								this.error = true;
+							}
+				}
+			}
+		})
+	</script>  
+  </body>
+</html>

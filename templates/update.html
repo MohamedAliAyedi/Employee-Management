@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+	<meta name="theme-color" content="#000000" />
+	<script src="/static/vue.js" preload></script>
+	<link rel="stylesheet" href="/static/tailwind.min.css">
+    <link rel="shortcut icon" href="/static/assets/img/favicon.ico" />
+    <link rel="apple-touch-icon"sizes="76x76" href="/static/assets/img/apple-icon.png" />
+    <link rel="stylesheet" href="/static/assets/vendor/@fortawesome/fontawesome-free/css/all.min.css" />
+    <title>Update</title>
+	<script>
+		  function encodeImageFileAsURL() {
+
+				var filesSelected = document.getElementById("inputFileToLoad").files;
+				if (filesSelected.length > 0) {
+					var fileToLoad = filesSelected[0];
+					var fileReader = new FileReader();
+
+					fileReader.onload = function(fileLoadedEvent) {
+							var srcData = fileLoadedEvent.target.result; // <--- data: base64
+
+							var newImage = document.getElementById('myimg');
+							newImage.src = srcData;
+							var hidden_me = document.getElementById("image");
+							var res = srcData.split("base64,");
+							hidden_me.value = res[1];
+							console.log("Converted Base64 version is " + hidden_me.value);
+					}
+					fileReader.readAsDataURL(fileToLoad);
+				}
+		}
+	</script>
+</head>
+  <body class="text-gray-800 antialiased">
+	  <div id="app">
+    <nav class="top-0 absolute z-50 w-full flex flex-wrap items-center justify-between px-2 py-3 navbar-expand-lg" >
+      <div class="container px-4 mx-auto flex flex-wrap items-center justify-between">
+        <div  class="w-full relative flex justify-between lg:w-auto lg:static lg:block lg:justify-start" >
+          <a class="text-sm font-bold leading-relaxed inline-block mr-4 py-2 whitespace-no-wrap uppercase text-white"  v-on:click="index()">
+			Employee Management
+		  </a>
+		  <button
+            class="cursor-pointer text-xl leading-none px-3 py-1 border border-solid border-transparent rounded bg-transparent block lg:hidden outline-none focus:outline-none"
+            type="button"
+          >
+            <i class="text-white fas fa-bars"></i>
+          </button>
+        </div>
+        <div  class="lg:flex flex-grow items-center bg-white lg:bg-transparent lg:shadow-none hidden"  id="example-collapse-navbar" >
+          <ul class="flex flex-col lg:flex-row list-none lg:ml-auto">
+			<li>
+			<span class="mr-6 text-white hover:text-gray-500 h-full py-4 px-2 cursor-pointer" v-on:click="create()">Create</span>
+		  </li>
+		  <li>
+			<span class="mr-6 text-white hover:text-gray-500 h-full py-4 px-2 cursor-pointer" v-on:click="index()">List</span>
+		</li>		
+		  <li>
+			<span class="mr-6 text-white hover:text-gray-500 h-full py-4 px-2 cursor-pointer" v-on:click="logout()">Logout</span>
+		</li>		
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <main class="profile-page">
+        
+        <section class="relative block" style="height: 500px;">
+        <div class="absolute top-0 w-full h-full bg-center bg-cover" style='background-image: url("https://images.unsplash.com/photo-1499336315816-097655dcfbda?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=crop&amp;w=2710&amp;q=80");'>
+            <span
+            id="blackOverlay"
+            class="w-full h-full absolute opacity-50 bg-black"
+            ></span>
+        </div>
+        <div class="top-auto bottom-0 left-0 right-0 w-full absolute pointer-events-none overflow-hidden" style="height: 70px; transform: translateZ(0px);">
+            <svg class="absolute bottom-0 overflow-hidden" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" version="1.1" viewBox="0 0 2560 100" x="0" y="0" >
+                <polygon class="text-gray-300 fill-current" points="2560 0 2560 100 0 100" ></polygon>
+          </svg>
+        </div>
+    </section>
+      <section class="relative py-16 bg-gray-300">
+          <div class="container mx-auto px-4">
+              <div v-for="e in Employee" >
+              <div> 
+                  <div  class="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-xl rounded-lg -mt-64">
+		  <div class="px-6">
+              <div class="flex flex-wrap justify-center">
+				  <div class="w-full lg:w-3/12 px-4 lg:order-2 flex justify-center">
+                 	 <div class="relative">
+                          <img
+						  alt="..."
+						  id="myimg"
+						  name="myimg"
+						  :src="'data:image/png;base64,'+e.image_medium"
+						  class="shadow-xl rounded-full h-auto align-middle border-none absolute -m-16 -ml-20 lg:-ml-16"
+						  style="max-width: 150px;"
+						  />
+						  <br>
+						</div>
+						
+                </div>
+				
+				<div class="w-full lg:w-4/12 px-4 lg:order-3 lg:text-right lg:self-center">
+					
+					<div class="py-6 px-3 mt-32 sm:mt-0">
+					</div>
+                </div>
+				
+				<div class="w-full lg:w-4/12 px-4 lg:order-1 justify-center">
+					
+                </div>
+			</div>
+			
+			
+			
+		</div>
+		<div class="mt-10 py-10 border-t border-gray-300 ">
+			
+			<div class="w-full lg:w-9/12 px-4">
+				<h2>UPDATE EMPLOYEE:</h2>
+				<br>
+				<div class="md:pr-12">
+					<form @submit.prevent="createe" style="width: 1216px;">
+						<span>Add Image: </span>
+						
+						<input id="inputFileToLoad" type="file" onchange="encodeImageFileAsURL();" />
+						<br><br>
+						<div style="float: left;margin-left:40px;">
+							<h2>Work information</h2>
+							<br><br>
+
+							<label class="block">
+								<input type="hidden" id="image" name="image" :value="e.image_medium" />
+								<div class="flex justify-between gap-3">
+																<span class="w-1/2 text-gray-700">
+																<label for="departement" class="block text-xs font-semibold text-gray-600 uppercase">Departement</label>
+																<select name="departement"class="form-select mt-1 block w-full">
+																	<option :value="e.department_id[0]">
+                                                                        {% raw %} {{e.department_id[1]}} {% endraw %}
+                                                                    </option>
+																	<option v-for="dep in Departements" :key="dep.id" :value="dep.id" >
+																		{% raw %} {{dep.display_name}} {% endraw %}
+																	</option>
+																</select>	
+																</span>
+																<span class="w-1/2 text-gray-700">
+																<label for="job_postion" class="block text-xs font-semibold text-gray-600 uppercase">Job Postion</label>
+																<select name="job_postion"class="form-select mt-1 block w-full">
+																	<option :value="e.job_id[0]">
+                                                                        {% raw %} {{e.job_id[1]}} {% endraw %}
+                                                                    </option>
+	        														<option v-for="job in Jobs" :key="job.id" :value="job.id" >
+																		{% raw %} {{job.name}} {% endraw %}
+																	</option>
+																</select>	
+																</span>
+						
+															</div>
+														</label>
+														<br><br>
+														<label class="block">
+															<div class="flex justify-between gap-3">
+																<span class="w-1/2 text-gray-700">
+																<label for="email_work" class="block text-xs font-semibold text-gray-600 uppercase">Email Work</label>
+																<input class="form-input mt-1 block w-full" name="email_work" type="email" :value="e.work_email" placeholder="exmple@url.cop.com"/>
+																</span>
+																<span class="w-1/2 text-gray-700">
+																<label for="mobile_work" class="block text-xs font-semibold text-gray-600 uppercase">Work Mobile</label>
+																<input class="form-input mt-1 block w-full" name="mobile_work" type="text" :value="e.work_phone" placeholder="(123) 456 789" />
+																</span>
+						
+															</div>
+														</label>
+														<br><br>
+														<label class="block">
+															<div class="flex justify-between gap-3">
+																<span class="w-1/2 text-gray-700">
+																<label for="work_adress" class="block text-xs font-semibold text-gray-600 uppercase">Work Address</label>
+																	<select name="work_adress"class="form-select mt-1 block w-full">
+																		<option :value="e.address_id[0]" >
+                                                                            {% raw %} {{e.address_id[1]}} {% endraw %}
+                                                                        </option>
+																		<option v-for="company in Companys" :key="company.id" :value="company.id" >
+																			{% raw %} {{company.name}} {% endraw %}
+																		</option>
+																	</select>	
+																</span>
+																<span class="w-1/2 text-gray-700">
+																<label for="work_hours" class="block text-xs font-semibold text-gray-600 uppercase">Working Hours</label>
+																<select name="work_hours"class="form-select mt-1 block w-full">
+																	<option value="0" >
+																		Standard 40 Hours/Week
+																	</option>
+																	<option value="1" >
+																		Standard 38 Hours/Week
+																	</option>
+																	<option value="2" >
+																		Standard 35 Hours/Week
+																	</option>
+																</select>	
+																</span>
+															</div>
+														</label>
+														<br><br>
+
+
+
+
+												</div>
+												<div style="float: left;margin-left:50px;">
+													<h2>Private information</h2>
+													<br>
+														<label class="block">
+															<div class="flex justify-between gap-3">
+																<span class="w-1/2 text-gray-700">
+																<label for="fname" class="block text-xs font-semibold text-gray-600 uppercase">First Name</label>
+																<input class="form-input mt-1 block w-full" name="fname" type="text" placeholder="Mohamed Ali" :value="fnamee" />
+																</span>
+																<span class="w-1/2 text-gray-700">
+																<label for="lname" class="block text-xs font-semibold text-gray-600 uppercase">Last Name</label>
+																<input class="form-input mt-1 block w-full" name="lname" type="text" placeholder="Ayadi" :value="lnamee" />
+																</span>
+															</div>
+														</label>
+														<br><br>
+														<label class="block">
+															<div class="flex justify-between gap-3">
+																<span class="w-1/2 text-gray-700">
+																<label for="country" class="block text-xs font-semibold text-gray-600 uppercase">Country</label>
+																<select name="country"class="form-select mt-1 block w-full">
+                                                                    <option> {% raw %} {{e.place_of_birth}} {% endraw %} </option>
+                                                                    <option v-for="country in Countrys" :key="country.id" :value="country.name" >
+																		{% raw %} {{country.name}} {% endraw %}
+																	</option>
+																</select>																	
+																</span>
+																<span class="w-1/2 text-gray-700">
+																<label for="personal_phone" class="block text-xs font-semibold text-gray-600 uppercase">Personal Mobile</label>
+																<input class="form-input mt-1 block w-full" name="personal_phone" type="text" :value="e.work_phone" placeholder="(+216) 27 313 347" />
+																</span>	
+															</div>
+														</label>
+														<br><br>
+														
+														<label class="block">
+															<div class="flex justify-between gap-3">
+																<span class="w-1/2 text-gray-700">
+																	<span class="text-gray-700">Gender</span>
+																	<div class="mt-2">
+																			<label class="inline-flex items-center">
+																				<input type="radio" class="form-radio" name="gender" value="male" />
+																				<span class="ml-2">Male</span>
+																			</label>
+																			<label class="inline-flex items-center ml-6">
+																				<input type="radio" class="form-radio" name="gender" value="female" />
+																				<span class="ml-2">female</span>
+																			</label>
+																	</div>
+																</span>
+																<span class="w-1/2 text-gray-700">
+																	<span class="text-gray-700">
+																		<label for="birthday" class="block text-xs font-semibold text-gray-600 uppercase">Data Birth</label>
+																		<input class="form-input mt-1 block w-full" name="birthday" type="date" :value="e.birthday" />
+																	</span>
+																</span>
+															</div>
+														</label>
+														<div>
+															<br><br>
+															<button type="submit" class="block w-full px-6 py-2 text-xs font-medium leading-6 text-center text-white uppercase transition bg-pink-500 rounded shadow ripple hover:shadow-lg hover:bg-pink-600 focus:outline-none" >
+																Update Employee
+														    </button>
+														</div>
+						
+													</div>
+													</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+    </section>
+</div>
+</main>
+</div> 
+
+<script>
+	let app = new Vue({
+		el: "#app",
+		data:{
+				auth: "false",
+				Companys: [],
+				Departements: [],
+				Jobs:[],
+                Countrys: [],
+                Employee: [],
+                fnamee:"hello",
+                lnamee:"world"
+		},
+			// Started Function
+			mounted: async function(){
+                let uid = localStorage.getItem("uid");
+			    let password = localStorage.getItem("password");
+			    let oid =localStorage.getItem("oid");
+
+			if(uid != null && password != null) {
+                await fetch("http://localhost:5000/api/getEmployee",{method:"post",headers:{"Content-Type":"application/json"},body:JSON.stringify({uid:uid,password:password,oid:oid})
+				})
+				.then((Employee)=>Employee.json())
+                .then((Employee)=>{this.Employee = Employee});
+                
+				await fetch("http://localhost:5000/api/getCompany",{method:"post",headers:{"Content-Type":"application/json"},body:JSON.stringify({uid:uid,password:password})})
+				.then((partner)=>partner.json())
+				.then((partner)=>{this.Companys = partner});
+
+				await fetch("http://localhost:5000/api/getDepartement",{method:"post",headers:{"Content-Type":"application/json"},body:JSON.stringify({uid:uid,password:password})})
+				.then((departement)=>departement.json())
+				.then((departement)=>{this.Departements = departement});
+				
+				await fetch("http://localhost:5000/api/getJobs",{method:"post",headers:{"Content-Type":"application/json"},body:JSON.stringify({uid:uid,password:password})})
+				.then((job)=>job.json())
+				.then((job)=>{this.Jobs = job});
+				await fetch("http://localhost:5000/api/getCountry",{method:"post",headers:{"Content-Type":"application/json"},body:JSON.stringify({uid:uid,password:password})})
+				.then((country)=>country.json())
+				.then((country)=>{this.Countrys = country});
+                
+                var res = this.Employee[0].display_name.split(" ");
+                this.fnamee= res[0];
+                this.lnamee= res[1];
+                console.log();
+				} else {
+					location = "/";
+			}
+		},
+		methods: {
+			isAuth: function() { return this.auth },
+			logout: function() {
+				localStorage.removeItem("uid");
+				localStorage.removeItem("password");
+				location = "/";
+			},
+			// Send Function
+			createe: async function(submitEvent) {
+				let uid = localStorage.getItem("uid");
+				let password = localStorage.getItem("password");
+				name= submitEvent.target.elements.fname.value+" "+submitEvent.target.elements.lname.value ;
+				personal_phone=submitEvent.target.elements.personal_phone.value;
+				gender =submitEvent.target.elements.gender.value;
+				departement= submitEvent.target.elements.departement.value;
+				job_postion= submitEvent.target.elements.job_postion.value;
+				email_work = submitEvent.target.elements.email_work.value;
+				mobile_work= submitEvent.target.elements.mobile_work.value;
+				work_adress= submitEvent.target.elements.work_adress.value;
+				work_hours= submitEvent.target.elements.work_hours.value;
+				image= submitEvent.target.elements.image.value;
+				birthday = submitEvent.target.elements.birthday.value;
+				country = submitEvent.target.elements.country.value;
+
+
+				console.log("test function Work !");
+			   
+				if(uid != null && password != null) {
+					await fetch("http://localhost:5000/api/update/"+localStorage.getItem("oid"),{
+					method:"post",
+					headers:{"Content-Type":"application/json"},
+					body:JSON.stringify({uid:uid,
+										password:password,
+										name: name ,
+										image:image,
+										personal_phone:personal_phone,
+										gender:gender,
+										departement:departement,
+										job_postion:job_postion,
+										email_work:email_work,
+										mobile_work:mobile_work,
+										work_adress:work_adress,
+										work_hours:work_hours,
+										birthday:birthday,
+										country:country,
+										})
+					})
+				} 
+				else {
+				location = "/";
+				}
+
+
+			},
+
+			create: async function() {
+
+				location = "/";
+
+
+			},
+			index: async function() {
+				location = "/";
+			},
+			
+
+		}
+
+	})
+</script>
+</body>
+</html>
+
+
+

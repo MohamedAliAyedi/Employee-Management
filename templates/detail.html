@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+	<meta name="theme-color" content="#000000" />
+	<script src="/static/vue.js" preload></script>
+	<link rel="stylesheet" href="/static/tailwind.min.css">
+    <link rel="shortcut icon" href="/static/assets/img/favicon.ico" />
+    <link rel="apple-touch-icon"sizes="76x76" href="/static/assets/img/apple-icon.png" />
+    <link rel="stylesheet" href="/static/assets/vendor/@fortawesome/fontawesome-free/css/all.min.css" />
+    <title>Detail</title>
+  </head>
+  <body class="text-gray-800 antialiased">
+	  <div id="app">
+    <nav class="top-0 absolute z-50 w-full flex flex-wrap items-center justify-between px-2 py-3 navbar-expand-lg" >
+      <div class="container px-4 mx-auto flex flex-wrap items-center justify-between">
+        <div  class="w-full relative flex justify-between lg:w-auto lg:static lg:block lg:justify-start" >
+          <a class="text-sm font-bold leading-relaxed inline-block mr-4 py-2 whitespace-no-wrap uppercase text-white" href="">
+			Employee Management
+		  </a>
+		  <button
+            class="cursor-pointer text-xl leading-none px-3 py-1 border border-solid border-transparent rounded bg-transparent block lg:hidden outline-none focus:outline-none"
+            type="button"
+          >
+            <i class="text-white fas fa-bars"></i>
+          </button>
+        </div>
+        <div  class="lg:flex flex-grow items-center bg-white lg:bg-transparent lg:shadow-none hidden"  id="example-collapse-navbar" >
+          <ul class="flex flex-col lg:flex-row list-none lg:ml-auto">
+			<li>
+			<span class="mr-6 text-white hover:text-gray-500 h-full py-4 px-2 cursor-pointer" v-on:click="create()">Create</span>
+		  </li>
+		  <li>
+			<span class="mr-6 text-white hover:text-gray-500 h-full py-4 px-2 cursor-pointer" v-on:click="index()">List</span>
+		</li>		
+		  <li>
+			<span class="mr-6 text-white hover:text-gray-500 h-full py-4 px-2 cursor-pointer" v-on:click="logout()">Logout</span>
+		</li>		
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <main class="profile-page">
+      <section class="relative block" style="height: 500px;">
+        <div class="absolute top-0 w-full h-full bg-center bg-cover" style='background-image: url("https://images.unsplash.com/photo-1499336315816-097655dcfbda?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=crop&amp;w=2710&amp;q=80");'>
+          <span
+            id="blackOverlay"
+            class="w-full h-full absolute opacity-50 bg-black"
+          ></span>
+        </div>
+        <div
+          class="top-auto bottom-0 left-0 right-0 w-full absolute pointer-events-none overflow-hidden"
+          style="height: 70px; transform: translateZ(0px);"
+        >
+          <svg class="absolute bottom-0 overflow-hidden" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" version="1.1"
+            viewBox="0 0 2560 100"
+            x="0"
+            y="0"
+          >
+            <polygon
+              class="text-gray-300 fill-current"
+              points="2560 0 2560 100 0 100"
+            ></polygon>
+          </svg>
+        </div>
+      </section>
+      <section class="relative py-16 bg-gray-300">
+        <div class="container mx-auto px-4">
+			<div v-for="e in Employee"> 
+				<div  class="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-xl rounded-lg -mt-64"
+          >
+		  <div class="px-6">
+              <div class="flex flex-wrap justify-center">
+				  <div class="w-full lg:w-3/12 px-4 lg:order-2 flex justify-center">
+                  <div class="relative">
+					  <img
+                      alt="..."
+                      :src="'data:image/png;base64,'+e.image_medium"
+                      class="shadow-xl rounded-full h-auto align-middle border-none absolute -m-16 -ml-20 lg:-ml-16"
+                      style="max-width: 150px;"
+                    />
+				</div>
+                </div>
+                <div class="w-full lg:w-4/12 px-4 lg:order-3 lg:text-right lg:self-center">
+                  <div class="py-6 px-3 mt-32 sm:mt-0">
+				</div>
+                </div>
+                <div class="w-full lg:w-4/12 px-4 lg:order-1">
+                
+                </div>
+              </div>
+              <div class="text-center mt-12">
+				  <h3 class="text-4xl font-semibold leading-normal mb-2 text-gray-800 mb-2">
+
+					{% raw %} {{e.display_name}} {% endraw %}
+                </h3>
+                <div  class="text-sm leading-normal mt-0 mb-2 text-gray-500 font-bold uppercase" >
+					<i  class="fas fa-map-marker-alt mr-2 text-lg text-gray-500"></i>
+					{% raw %} {{e.work_location}} {% endraw %}
+                </div>
+                <div class="mb-2 text-gray-700 mt-10">
+				  <i class="fas fa-briefcase mr-2 text-lg text-gray-500"></i>
+				  {% raw %} {{e.job_id[1]}} {% endraw %}
+                </div>
+                <div class="mb-2 text-gray-700">
+				  
+                </div>
+			</div>
+			<div class="mt-10 py-10 border-t border-gray-300 text-center">
+				  
+					<div class="w-full lg:w-9/12 px-4">
+						<div class="md:pr-12">
+							<div style="float: left;margin-left:100px;">
+							</div>
+							<ul class="list-none mt-6" style="float: left;margin-bottom:100px;margin-left: 100px;">
+								<li class="py-2">
+									<h1 class="text-gray"><b>Work Info:</b></h1>
+								</li>
+							<!-- START LI-->
+							<li class="py-2">
+								<div class="flex items-center">
+									<span class="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-pink-600 bg-pink-200 mr-3">
+										<i class="fas fa-fingerprint"></i>
+									</span>
+									<h4 class="text-gray-600">
+									<b>Department :</b> {% raw %} {{e.department_id[1]}} {% endraw %}
+									</h4>
+								</div>
+							</li>
+							<!-- END LI-->
+							<!-- START LI-->
+							<li class="py-2">
+								<div class="flex items-center">
+									<span class="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-pink-600 bg-pink-200 mr-3">
+										<i class="fas fa-fingerprint"></i>
+									</span>
+									<h4 class="text-gray-600">
+									<b>Job Position :</b> {% raw %} {{e.job_id[1]}} {% endraw %}
+									</h4>
+								</div>
+							</li>
+							<!-- END LI-->
+							  <!-- START LI-->
+							<li class="py-2">
+							  <div class="flex items-center">
+								  <span class="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-pink-600 bg-pink-200 mr-3">
+									  <i class="fas fa-fingerprint"></i>
+								  </span>
+								  <h4 class="text-gray-600">
+									 <b>Email Work :</b> {% raw %} {{e.work_email}} {% endraw %}
+								  </h4>
+							  </div>
+							</li>
+							<!-- END LI-->
+							<!-- START LI-->
+							<li class="py-2">
+							  <div class="flex items-center">
+								  <span class="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-pink-600 bg-pink-200 mr-3">
+									  <i class="fas fa-fingerprint"></i>
+								  </span>
+								  <h4 class="text-gray-600">
+									 <b>Work Phone :</b> {% raw %} {{e.work_phone}} {% endraw %}
+								  </h4>
+							  </div>
+							</li>
+							<!-- END LI-->
+							<!-- START LI-->
+							<li class="py-2">
+								<div class="flex items-center">
+									<span class="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-pink-600 bg-pink-200 mr-3">
+										<i class="fas fa-fingerprint"></i>
+									</span>
+									<h4 class="text-gray-600">
+									   <b>Work Address :</b> {% raw %} {{e.address_id[1]}} {% endraw %}
+									</h4>
+								</div>
+							  </li>
+							  <!-- END LI-->
+							<!-- START LI-->
+							<li class="py-2">
+								<div class="flex items-center">
+									<span class="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-pink-600 bg-pink-200 mr-3">
+										<i class="fas fa-fingerprint"></i>
+									</span>
+									<h4 class="text-gray-600">
+									   <b>Working Hours :</b> {% raw %} {{e.resource_calendar_id[1]}} {% endraw %}
+									</h4>
+								</div>
+							  </li>
+							  <!-- END LI-->
+						  </ul>
+
+						  <ul class="list-none mt-6" style="float: left;margin-left:80px;">
+							<li class="py-2">
+								<h1 class="text-gray"><b>Personal Info:</b></h1>
+							</li>
+							<!-- START LI-->
+							<li class="py-2">
+								<div class="flex items-center">
+									<span class="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-pink-600 bg-pink-200 mr-3">
+										<i class="fas fa-fingerprint"></i>
+									</span>
+									<h4 class="text-gray-600">
+									   <b>Nationality (Country) :</b> {% raw %} {{e.place_of_birth}} {% endraw %}
+									</h4>
+								</div>
+							  </li>
+							  <!-- END LI-->
+							<!-- START LI-->
+							<li class="py-2">
+								<div class="flex items-center">
+									<span class="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-pink-600 bg-pink-200 mr-3">
+										<i class="fas fa-fingerprint"></i>
+									</span>
+									<h4 class="text-gray-600">
+									   <b>Gender :</b> {% raw %} {{e.gender}} {% endraw %}
+									</h4>
+								</div>
+							  </li>
+							  <!-- END LI-->
+							<!-- START LI-->
+							<li class="py-2">
+								<div class="flex items-center">
+									<span class="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-pink-600 bg-pink-200 mr-3">
+										<i class="fas fa-fingerprint"></i>
+									</span>
+									<h4 class="text-gray-600">
+									   <b>Birthday :</b> {% raw %} {{e.birthday}} {% endraw %}
+									</h4>
+								</div>
+							  </li>
+							  <!-- END LI-->
+
+							<!-- START LI-->
+							<li class="py-2">
+								<div class="flex items-center">
+									<span class="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-pink-600 bg-pink-200 mr-3">
+										<i class="fas fa-fingerprint"></i>
+									</span>
+									<h4 class="text-gray-600">
+									   <b>Private Address :</b> {% raw %} {{e.address_home_id[1]}} {% endraw %}
+									</h4>
+								</div>
+							  </li>
+							  <!-- END LI-->
+							<!-- START LI-->
+							<li class="py-2">
+								<div class="flex items-center">
+									<span class="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-pink-600 bg-pink-200 mr-3">
+										<i class="fas fa-fingerprint"></i>
+									</span>
+									<h4 class="text-gray-600">
+									   <b>Certificate Level :</b> {% raw %} {{e.certificate}} {% endraw %}
+									</h4>
+								</div>
+							  </li>
+							  <!-- END LI-->
+
+						  </ul>
+						</div>
+
+			</div>
+		</div>
+	</div>
+</div>
+</div>
+</div>
+      </section>
+    </main>
+</div>   
+</body>
+  <script>
+	  let app = new Vue({
+		el: "#app",
+		data:{
+				auth: "false",
+				Employee: []
+		},
+			// Started Function
+			mounted: async function(){
+			let uid = localStorage.getItem("uid");
+			let password = localStorage.getItem("password");
+			let oid =localStorage.getItem("oid");
+
+
+			console.log(oid);
+			if(uid != null && password != null) {
+				await fetch("http://localhost:5000/api/getEmployee",
+				{method:"post",headers:{"Content-Type":"application/json"},
+				body:JSON.stringify({uid:uid,password:password,oid:oid})
+				})
+				.then((Employee)=>Employee.json())
+				.then((Employee)=>{this.Employee = Employee});
+				
+				console.log(this.Employee);
+				} else {
+					location = "/";
+			}
+			localStorage.removeItem("oid");
+
+		},
+		methods: {
+			isAuth: function() { return this.auth },
+			logout: function() {
+				localStorage.removeItem("uid");
+				localStorage.removeItem("password");
+				location = "/"
+			},
+
+			create: async function() {
+				location = "/create";
+			},
+			index: async function() {
+				location = "/";
+			},
+
+		}
+
+	})
+</script>
+</html>
+
