@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% block  content %}
+        <div class="container-fluid" id="app">
+          <div class="row">
+            <div class="col-md-6 mx-auto">
+                <div class="card shadow mb-4 mt-4 animate__animated animate__zoomIn animate__faster">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">Ajouter Employe</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="form" method="POST" enctype="multipart/form-data">
+                            <label for="name">Nom:</label>
+                            <input id="name" class="form-control mb-4" type="text" name="name" placeholder="Nom...">
+                            <label for="email">Email:</label>
+                            <input id="email" class="form-control mb-4" type="text" name="email" placeholder="Email..." >
+                            <button v-on:click="ajouter()" class="btn btn-primary form-control">Ajouter</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+          </div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+	var a;
+	let app = new Vue({
+		el: "#app",
+
+		data:{
+		},
+
+		mounted: async function() {
+			if(!localStorage.getItem('uid')) {
+				location = "/";
+			}
+		},
+
+		methods: {
+			ajouter: async function() {
+				let uid = localStorage.getItem("uid");
+				let password = localStorage.getItem("password");
+
+				let name = document.getElementById("name").value;
+				let email = document.getElementById("email").value;
+
+				await fetch("http://localhost:5000/api/employe/create",{method:"post", headers:{"Content-Type":"application/json"},body:JSON.stringify({"uid":uid,"password":password,"name":name,"email":email})})
+				.then((res)=>res.json())
+				.then((res)=>{
+					alert(res)
+				});
+
+			}
+		}
+	})
+</script>
+{% endblock %}

@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% block  content %}
+        <div class="container-fluid" id="app">
+          <div class="row">
+            <div class="col-md-6 mx-auto">
+                <div class="card shadow mb-4 mt-4 animate__animated animate__zoomIn animate__faster">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">Modifer Employe</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="form" method="POST" enctype="multipart/form-data">
+                            <label for="name">Nom:</label>
+                            <input id="name" class="form-control mb-4" type="text" name="name" placeholder="Nom...">
+                            <label for="email">Email:</label>
+                            <input id="email" class="form-control mb-4" type="text" name="email" placeholder="Email..." >
+                            <button v-on:click="modifer()" class="btn btn-primary form-control">Modifer</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+          </div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+	var a;
+	let app = new Vue({
+		el: "#app",
+
+		data:{
+			_id: 0
+		},
+
+		mounted: async function() {
+			if(!localStorage.getItem('uid')) {
+				location = "/";
+			}
+			let params = (new URL(location.href)).searchParams;
+			this._id = params.get("id");
+
+			let uid = localStorage.getItem("uid");
+			let password = localStorage.getItem("password");
+
+			await fetch("http://localhost:5000/api/employe/"+this._id,{method:"post", headers:{"Content-Type":"application/json"},body:JSON.stringify({"uid":uid,"password":password})})
+			.then((res)=>res.json())
+			.then((res)=>{
+				a=res;
+				let name = document.getElementById("name");
+				let email = document.getElementById("email");
+				name.value = res[0].name;
+				email.value = res[0].work_email;
+			})
+		},
+
+		methods: {
+			modifer: async function() {
+				let uid = localStorage.getItem("uid");
+				let password = localStorage.getItem("password");
+
+				let name = document.getElementById("name").value;
+				let email = document.getElementById("email").value;
+
+				await fetch("http://localhost:5000/api/employe/update/"+this._id,{method:"post", headers:{"Content-Type":"application/json"},body:JSON.stringify({"uid":uid,"password":password,"name":name,"email":email})})
+				.then((res)=>res.json())
+				.then((res)=>{
+					alert(res)
+				});
+
+			}
+		}
+	})
+</script>
+{% endblock %}

@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<script src="/static/vue.js" preload></script>
+		<link rel="stylesheet" href="/static/tailwind.min.css">
+	</head>
+	<body>
+		<div id="app">
+			<div>
+				<ul>
+				<li v-for="purchase in purchases" :key="purchase.id">
+					{% raw %} test {% endraw %}
+				</li>
+				</ul>
+				<button v-on:click="logout()">Logout</button>
+				<button v-on:click="debug()">debug</button>
+			</div>
+		</div>
+
+		<script>
+			let app = new Vue({
+				el: "#app",
+				data:() =>  {
+					return {
+						purchases: ["test","test"]
+					}
+				},
+				mounted: async ()=>{
+					let uid = localStorage.getItem("uid");
+					let password = localStorage.getItem("password");
+
+					if(uid != null && password != null) {
+						await fetch("http://localhost:5000/api/employes",{method:"post",headers:{"Content-Type":"application/json"},body:JSON.stringify({uid:uid,password:password})})
+						.then((res)=>res.text())
+						.then((res)=>{console.log(res);this.purchases = res});
+						//this.auth = true;
+					} else {
+						location = "/";
+					}
+				},
+				methods: {
+					isAuth: () => this.auth,
+					logout: () => {
+						localStorage.removeItem("uid");
+						localStorage.removeItem("password");
+						location = "/"
+					},
+					debug: () => {
+						console.log(this.purchases);
+						console.log(this.auth);
+					}
+				}
+			})
+		</script>
+	</body>
+</html>

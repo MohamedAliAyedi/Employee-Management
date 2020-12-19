@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+
+{% block content %}
+        <div class="container-fluid">
+          <div class="card shadow mb-4 mt-4">
+            <div class="card-body">
+              <a href="/ajouter_employe" class="btn btn-primary">Ajouter Employe</a>
+            </div>
+          </div>
+
+          <div class="card shadow mb-4 mt-4">
+            <div class="card-header py-3">
+              <h6 class="m-0 font-weight-bold text-primary">Employes</h6>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+			  	<div id="app">
+                	<table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                	  <thead>
+                	    <tr>
+                	      <th>ID</th>
+                	      <th>Nom</th>
+                	      <th>Email</th>
+                	      <th>Action</th>
+                	    </tr>
+                	  </thead>
+                	  <tbody >
+                	    <tr v-for="employe in employes" v:key="employe.id">
+                	      <td>{% raw %}{{employe.id}}{% endraw %}</td>
+                	      <td>{% raw %}{{employe.name}}{% endraw %}</td>
+                	      <td>{% raw %}{{employe.work_email}}{% endraw %}</td>
+                	      <td>
+                	      <a :href="'/modifer_employe?id='+employe.id" class="btn btn-circle btn-primary">
+                	          <i class="fa fa-fw fa-pen"></i>
+                	       </a>
+                	       <button v-on:click="delete2(employe.id)" class="btn btn-circle btn-danger">
+                	          <i class="fa fa-fw fa-trash"></i>
+                	       </button>
+                	      </td>
+                	    </tr>
+                	        
+                	    <!-- @endforeach -->
+                	  </tbody>
+                	</table>
+			  	</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+{% endblock %}
+
+{% block scripts %}
+  <script>
+      $(document).ready(function() {
+        //$('#dataTable').DataTable();
+      });
+
+	  var app = new Vue({
+		el: "#app",
+		data: {
+			employes: [],
+		},
+		mounted: async function() {
+			if(!localStorage.getItem('uid')) {
+				location = "/";
+			}
+			let uid = localStorage.getItem("uid");
+			let password = localStorage.getItem("password");
+			await fetch("http://localhost:5000/api/employes",{method: "post", headers: {"Content-Type":"application/json"},body:JSON.stringify({"uid":uid,"password":password})})
+			.then((res)=>res.json())
+			.then((res)=>{
+					this.employes = res;
+			});
+        	$('#dataTable').DataTable();
+		},
+		methods: {
+			delete2: async function(id) {
+				let uid = localStorage.getItem("uid");
+				let password = localStorage.getItem("password");
+				await fetch("http://localhost:5000/api/employe/delete/"+id,{method: "post", headers: {"Content-Type":"application/json"},body:JSON.stringify({"uid":uid,"password":password})})
+				.then((res)=>res.json())
+				.then((res)=>{
+					alert(res);
+					location="/employes";
+				});
+			},
+		}
+	  })
+  </script>
+{% endblock %}
